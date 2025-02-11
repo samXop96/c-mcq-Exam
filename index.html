@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Programming MCQ Exam</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 60%; margin: auto; padding: 20px; }
+        .question { text-align: left; margin-bottom: 10px; }
+        .timer { font-size: 20px; color: red; font-weight: bold; }
+        .submit-btn { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
+    </style>
+    <script>
+        let timeLeft = 3600; // 1 hour in seconds
+        function startTimer() {
+            let timerInterval = setInterval(function () {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById("timer").innerText = `Time Left: ${minutes}m ${seconds}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Submitting your answers.");
+                    document.getElementById("quizForm").submit();
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        function submitExam() {
+            let score = 0;
+            let answers = { 1: "b", 2: "b", 3: "c", 4: "b", 5: "c", 6: "b", 7: "b", 8: "c", 9: "a", 10: "b" };
+            let form = document.getElementById("quizForm");
+            let results = {};
+            for (let i in answers) {
+                let selected = form.querySelector(`input[name='q${i}']:checked`);
+                results[i] = selected ? selected.value : "Not Answered";
+                if (selected && selected.value === answers[i]) {
+                    score++;
+                }
+            }
+            localStorage.setItem("examResults", JSON.stringify(results));
+            alert("Your Score: " + score + " / 50");
+        }
+    </script>
+</head>
+<body onload="startTimer()">
+    <div class="container">
+        <h2>C Programming MCQ Exam</h2>
+        <div class="timer" id="timer">Time Left: 60m 0s</div>
+        <form id="quizForm" onsubmit="event.preventDefault(); submitExam();">
+            <div class="question">
+                <p>1. Which of the following is a valid identifier in C?</p>
+                <input type="radio" name="q1" value="a"> 123abc <br>
+                <input type="radio" name="q1" value="b"> _variable1 <br>
+                <input type="radio" name="q1" value="c"> int <br>
+                <input type="radio" name="q1" value="d"> float-num <br>
+            </div>
+            <div class="question">
+                <p>2. What will be the output of `printf("%d", 5 + 'A');`?</p>
+                <input type="radio" name="q2" value="a"> A5 <br>
+                <input type="radio" name="q2" value="b"> 70 <br>
+                <input type="radio" name="q2" value="c"> 5A <br>
+                <input type="radio" name="q2" value="d"> Compilation Error <br>
+            </div>
+            <button type="submit" class="submit-btn">Submit Exam</button>
+        </form>
+        <p><a href="results.html">View Results</a></p>
+    </div>
+</body>
+</html>
